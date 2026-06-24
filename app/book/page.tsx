@@ -1,10 +1,7 @@
-import { Suspense } from "react"
-import BookingWrapper from "./booking-wrapper"
+"use client";
+
+import { BookingForm } from "./booking-form";
 
 export default function BookPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <BookingWrapper />
-    </Suspense>
-  )
+  return <BookingForm />;
 }
