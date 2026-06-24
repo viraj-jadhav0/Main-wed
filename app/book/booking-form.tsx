@@ -14,7 +14,9 @@ export function BookingForm() {
   const { lang } = useApp()
   const router = useRouter()
   const searchParams = useSearchParams()
-  
+
+  if (!searchParams) return null;
+
   const serviceSlug = searchParams.get('service') || ''
   const serviceType = searchParams.get('type') || ''
   const serviceName = searchParams.get('name') || ''
