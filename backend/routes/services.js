@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Service = require('../models/Service');
+const upload = require('../middleware/upload');
+const path = require('path');
 
 // Get all services
 router.get('/', async (req, res) => {
@@ -61,6 +63,20 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error('Error creating service:', error);
     res.status(500).json({ error: 'Failed to create service' });
+  }
+});
+
+// Upload service image
+router.post('/upload', upload.single('image'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    const imageUrl = `/uploads/images/${req.file.filename}`;
+    res.json({ imageUrl });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).json({ error: 'Failed to upload image' });
   }
 });
 

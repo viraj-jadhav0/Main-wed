@@ -33,7 +33,7 @@ export function Footer() {
               {t.footer.services[lang]}
             </h3>
             <ul className="mt-4 flex flex-col gap-2.5">
-              {services.slice(0, 5).map((s) => (
+              {services.slice(0, 4).map((s) => (
                 <li key={s.slug}>
                   <Link
                     href={`/${categoryRoute[s.category]}/${s.slug}`}

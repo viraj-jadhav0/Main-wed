@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { useApp } from "@/components/app-provider"
-import { Plus, Edit, Trash2, ArrowLeft, Save, X } from "lucide-react"
+import { Plus, Edit, Trash2, ArrowLeft, Save, X, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface Service {
@@ -214,6 +214,29 @@ export default function AdminServicesPage() {
     setIsAdding(false)
   }
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append('image', file)
+
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+      const response = await fetch(`${API_URL}/api/services/upload`, {
+        method: 'POST',
+        body: formData,
+      })
+      const data = await response.json()
+      if (data.imageUrl) {
+        setFormData({ ...formData, image: data.imageUrl })
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      alert('Failed to upload image')
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -348,13 +371,25 @@ export default function AdminServicesPage() {
                   <label className="mb-2 block text-sm font-medium text-foreground">
                     {lang === "en" ? "Image URL" : lang === "mr" ? "प्रतिमा URL" : "छवि URL"}
                   </label>
-                  <input
-                    type="text"
-                    value={formData.image || ""}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
-                    placeholder="/images/service.jpg"
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={formData.image || ""}
+                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                      className="flex-1 rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
+                      placeholder="/images/service.jpg"
+                    />
+                    <label className="flex items-center gap-2 rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground hover:border-primary cursor-pointer transition-colors">
+                      <Upload className="size-4" />
+                      <span className="text-sm">{lang === "en" ? "Upload" : lang === "mr" ? "अपलोड" : "अपलोड"}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
                 </div>
                 <div>
                   <label className="mb-2 block text-sm font-medium text-foreground">

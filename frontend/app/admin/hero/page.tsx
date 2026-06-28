@@ -46,17 +46,30 @@ export default function AdminHeroPage() {
     }
   }
 
-  const handleImageUpload = (type: "desktop" | "mobile", e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (type: "desktop" | "mobile", e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      // In a real app, this would upload to a server
-      // For now, just use the file name as a placeholder
-      const imageUrl = `/images/${file.name}`
-      if (type === "desktop") {
-        setHeroImages({ ...heroImages, desktop_image: imageUrl })
-      } else {
-        setHeroImages({ ...heroImages, mobile_image: imageUrl })
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append('image', file)
+
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+      const response = await fetch(`${API_URL}/api/hero/upload`, {
+        method: 'POST',
+        body: formData,
+      })
+      const data = await response.json()
+      if (data.imageUrl) {
+        if (type === "desktop") {
+          setHeroImages({ ...heroImages, desktop_image: data.imageUrl })
+        } else {
+          setHeroImages({ ...heroImages, mobile_image: data.imageUrl })
+        }
       }
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      alert('Failed to upload image')
     }
   }
 
