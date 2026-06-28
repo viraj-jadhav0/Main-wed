@@ -9,7 +9,7 @@ import { Plus, Edit, Trash2, ArrowLeft, Save, X, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface Service {
-  id?: number
+  _id?: string
   slug: string
   category: string
   title_en: string
@@ -144,7 +144,7 @@ export default function AdminServicesPage() {
     setIsAdding(true)
   }
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this service?")) return
     try {
       const response = await fetch(`/api/services/${id}`, {
@@ -187,8 +187,8 @@ export default function AdminServicesPage() {
           console.error("Failed to create service:", errorData)
           alert(`Failed to create service: ${errorData.error || 'Unknown error'}`)
         }
-      } else if (editingService?.id) {
-        const response = await fetch(`/api/services/${editingService.id}`, {
+      } else if (editingService?._id) {
+        const response = await fetch(`/api/services/${editingService._id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataToSave),

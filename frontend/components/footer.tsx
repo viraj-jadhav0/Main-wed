@@ -4,11 +4,40 @@ import Link from "next/link"
 import { Phone, Mail, Flower2, MapPin } from "lucide-react"
 import { useApp } from "@/components/app-provider"
 import { t } from "@/lib/translations"
-import { services, categoryRoute } from "@/lib/data"
+import { useEffect, useState } from "react"
+
+interface Service {
+  _id: string
+  slug: string
+  category: string
+  title_en: string
+  title_mr: string
+  title_hi: string
+}
+
+const categoryRoute: Record<string, string> = {
+  events: "events",
+  pooja: "pooja",
+  sahitya: "sahitya",
+}
 
 export function Footer() {
   const { lang } = useApp()
   const year = new Date().getFullYear()
+  const [services, setServices] = useState<Service[]>([])
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch("/api/services")
+        const data = await response.json()
+        setServices(data.services || [])
+      } catch (error) {
+        console.error("Error fetching services:", error)
+      }
+    }
+    fetchServices()
+  }, [])
 
   return (
     <footer className="border-t border-border bg-card">
@@ -39,7 +68,7 @@ export function Footer() {
                     href={`/${categoryRoute[s.category]}/${s.slug}`}
                     className="text-sm text-muted-foreground transition-colors hover:text-primary"
                   >
-                    {s.title[lang]}
+                    {lang === "en" ? s.title_en : lang === "mr" ? s.title_mr : s.title_hi}
                   </Link>
                 </li>
               ))}
