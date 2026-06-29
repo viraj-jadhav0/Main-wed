@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 interface Booking {
-  id: number
+  _id: string
   name: string
   email: string
   phone: string
@@ -84,7 +84,7 @@ export default function AdminBookingsPage() {
     }
   }
 
-  const updateStatus = async (id: number, status: string) => {
+  const updateStatus = async (id: string, status: string) => {
     try {
       const response = await fetch(`/api/bookings/${id}`, {
         method: "PATCH",
@@ -103,7 +103,7 @@ export default function AdminBookingsPage() {
     }
   }
 
-  const deleteBooking = async (id: number) => {
+  const deleteBooking = async (id: string) => {
     if (!confirm("Are you sure you want to delete this booking?")) return
     try {
       const response = await fetch(`/api/bookings/${id}`, {
@@ -265,7 +265,7 @@ export default function AdminBookingsPage() {
             <div className="space-y-4">
               {filteredBookings.map((booking) => (
                 <div
-                  key={booking.id}
+                  key={booking._id}
                   className="rounded-3xl border border-border/60 bg-card/50 p-6 transition-all hover:shadow-lg hover:shadow-primary/5"
                 >
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -275,7 +275,7 @@ export default function AdminBookingsPage() {
                         <div>
                           <h3 className="font-heading text-lg font-semibold text-foreground">{booking.service_name}</h3>
                           <p className="text-sm text-muted-foreground">
-                            {lang === "en" && "Booking ID"} {lang === "mr" && "बुकिंग आयडी"} {lang === "hi" && "बुकिंग आईडी"}: #{booking.id}
+                            {lang === "en" && "Booking ID"} {lang === "mr" && "बुकिंग आयडी"} {lang === "hi" && "बुकिंग आईडी"}: #{booking._id}
                           </p>
                         </div>
                         <span
@@ -353,14 +353,14 @@ export default function AdminBookingsPage() {
                       {booking.status === "pending" && (
                         <>
                           <Button
-                            onClick={() => updateStatus(booking.id, "confirmed")}
+                            onClick={() => updateStatus(booking._id, "confirmed")}
                             className="w-full"
                             size="sm"
                           >
                             {lang === "en" && "Confirm"} {lang === "mr" && "पुष्टी करा"} {lang === "hi" && "पुष्टि करें"}
                           </Button>
                           <Button
-                            onClick={() => updateStatus(booking.id, "cancelled")}
+                            onClick={() => updateStatus(booking._id, "cancelled")}
                             variant="outline"
                             className="w-full"
                             size="sm"
@@ -371,7 +371,7 @@ export default function AdminBookingsPage() {
                       )}
                       {booking.status === "confirmed" && (
                         <Button
-                          onClick={() => updateStatus(booking.id, "completed")}
+                          onClick={() => updateStatus(booking._id, "completed")}
                           className="w-full"
                           size="sm"
                         >
@@ -379,7 +379,7 @@ export default function AdminBookingsPage() {
                         </Button>
                       )}
                       <Button
-                        onClick={() => deleteBooking(booking.id)}
+                        onClick={() => deleteBooking(booking._id)}
                         variant="destructive"
                         className="w-full"
                         size="sm"
