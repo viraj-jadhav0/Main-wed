@@ -23,96 +23,73 @@ const serviceSchema = new mongoose.Schema({
     required: true
   },
   description_en: {
-    type: String,
-    required: true
+    type: String
   },
   description_mr: {
-    type: String,
-    required: true
+    type: String
   },
   description_hi: {
-    type: String,
-    required: true
+    type: String
   },
   short_en: {
-    type: String,
-    required: true
+    type: String
   },
   short_mr: {
-    type: String,
-    required: true
+    type: String
   },
   short_hi: {
-    type: String,
-    required: true
+    type: String
   },
   image: {
-    type: String,
-    required: true
+    type: String
   },
   duration: {
-    type: String,
-    required: true
+    type: String
   },
   basic_price: {
-    type: String,
-    required: true
+    type: String
   },
   basic_includes_en: {
-    type: String,
-    required: true
+    type: String
   },
   basic_includes_mr: {
-    type: String,
-    required: true
+    type: String
   },
   basic_includes_hi: {
-    type: String,
-    required: true
+    type: String
   },
   standard_price: {
-    type: String,
-    required: true
+    type: String
   },
   standard_includes_en: {
-    type: String,
-    required: true
+    type: String
   },
   standard_includes_mr: {
-    type: String,
-    required: true
+    type: String
   },
   standard_includes_hi: {
-    type: String,
-    required: true
+    type: String
   },
   premium_price: {
-    type: String,
-    required: true
+    type: String
   },
   premium_includes_en: {
-    type: String,
-    required: true
+    type: String
   },
   premium_includes_mr: {
-    type: String,
-    required: true
+    type: String
   },
   premium_includes_hi: {
-    type: String,
-    required: true
+    type: String
   },
   sahitya_en: {
-    type: String,
-    required: true
+    type: String
   },
   sahitya_mr: {
-    type: String,
-    required: true
+    type: String
   },
   sahitya_hi: {
-    type: String,
-    required: true
+    type: String
   },
   muhurta: String
 }, {

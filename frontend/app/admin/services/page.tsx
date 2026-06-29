@@ -703,7 +703,7 @@ export default function AdminServicesPage() {
           <div className="space-y-4">
             {serviceList.map((service) => (
               <div
-                key={service.id}
+                key={service._id}
                 className="rounded-3xl border border-border/60 bg-card/50 p-6"
               >
                 <div className="flex items-start justify-between gap-4">
@@ -751,7 +751,7 @@ export default function AdminServicesPage() {
                       {lang === "en" ? "Edit" : lang === "mr" ? "संपादित करा" : "संपादित करें"}
                     </Button>
                     <Button
-                      onClick={() => handleDelete(service.id!)}
+                      onClick={() => handleDelete(service._id!)}
                       variant="destructive"
                       size="sm"
                       className="gap-2"
