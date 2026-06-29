@@ -154,13 +154,25 @@ export default function AdminHeroPage() {
                 <label className="mb-2 block text-sm font-medium text-foreground">
                   {lang === "en" ? "Image URL" : lang === "mr" ? "प्रतिमा URL" : "छवि URL"}
                 </label>
-                <input
-                  type="text"
-                  value={heroImages.desktop_image}
-                  onChange={(e) => setHeroImages({ ...heroImages, desktop_image: e.target.value })}
-                  className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
-                  placeholder="/images/hero-desktop.jpg"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={heroImages.desktop_image}
+                    onChange={(e) => setHeroImages({ ...heroImages, desktop_image: e.target.value })}
+                    className="flex-1 rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
+                    placeholder="/images/hero-desktop.jpg"
+                  />
+                  <label className="flex items-center gap-2 rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground hover:border-primary cursor-pointer transition-colors">
+                    <Upload className="size-4" />
+                    <span className="text-sm">{lang === "en" ? "Upload" : lang === "mr" ? "अपलोड" : "अपलोड"}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload("desktop", e)}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
               </div>
             </div>
 
@@ -182,13 +194,25 @@ export default function AdminHeroPage() {
                 <label className="mb-2 block text-sm font-medium text-foreground">
                   {lang === "en" ? "Image URL" : lang === "mr" ? "प्रतिमा URL" : "छवि URL"}
                 </label>
-                <input
-                  type="text"
-                  value={heroImages.mobile_image}
-                  onChange={(e) => setHeroImages({ ...heroImages, mobile_image: e.target.value })}
-                  className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
-                  placeholder="/images/hero-mobile.jpg"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={heroImages.mobile_image}
+                    onChange={(e) => setHeroImages({ ...heroImages, mobile_image: e.target.value })}
+                    className="flex-1 rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
+                    placeholder="/images/hero-mobile.jpg"
+                  />
+                  <label className="flex items-center gap-2 rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground hover:border-primary cursor-pointer transition-colors">
+                    <Upload className="size-4" />
+                    <span className="text-sm">{lang === "en" ? "Upload" : lang === "mr" ? "अपलोड" : "अपलोड"}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload("mobile", e)}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
               </div>
             </div>
           </div>
