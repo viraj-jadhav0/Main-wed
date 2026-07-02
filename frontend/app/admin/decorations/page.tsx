@@ -241,7 +241,7 @@ export default function AdminDecorationsPage() {
                     className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
                   >
                     <option value="">{lang === "en" ? "Select Service" : lang === "mr" ? "सेवा निवडा" : "सेवा चुनें"}</option>
-                    {services.filter((s) => s.category === "events").map((service) => (
+                    {services.map((service) => (
                       <option key={service._id} value={service._id}>
                         {lang === "en" ? service.title_en : lang === "mr" ? service.title_mr : service.title_hi}
                       </option>
