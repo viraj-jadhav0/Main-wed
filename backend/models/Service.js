@@ -82,15 +82,17 @@ const serviceSchema = new mongoose.Schema({
   premium_includes_hi: {
     type: String
   },
-  sahitya_en: {
-    type: String
-  },
-  sahitya_mr: {
-    type: String
-  },
-  sahitya_hi: {
-    type: String
-  },
+  sahitya: [{
+    en: {
+      type: String
+    },
+    mr: {
+      type: String
+    },
+    hi: {
+      type: String
+    }
+  }],
   muhurta: String
 }, {
   timestamps: true

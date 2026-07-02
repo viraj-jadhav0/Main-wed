@@ -9,8 +9,8 @@ import { ArrowLeft, Save, Plus, Edit, Trash2, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface Decoration {
-  id?: number
-  service_id: number
+  _id?: string
+  service_id: string
   name_en: string
   name_mr: string
   name_hi: string
@@ -22,7 +22,7 @@ interface Decoration {
 }
 
 interface Service {
-  id: number
+  _id: string
   title_en: string
   title_mr: string
   title_hi: string
@@ -39,7 +39,7 @@ export default function AdminDecorationsPage() {
   const [isAdding, setIsAdding] = useState(false)
   const [editingDecoration, setEditingDecoration] = useState<Decoration | null>(null)
   const [formData, setFormData] = useState<Decoration>({
-    service_id: 0,
+    service_id: "",
     name_en: "",
     name_mr: "",
     name_hi: "",
@@ -92,7 +92,7 @@ export default function AdminDecorationsPage() {
   const handleAdd = () => {
     setEditingDecoration(null)
     setFormData({
-      service_id: 0,
+      service_id: "",
       name_en: "",
       name_mr: "",
       name_hi: "",
@@ -109,7 +109,7 @@ export default function AdminDecorationsPage() {
     setIsAdding(false)
     setEditingDecoration(null)
     setFormData({
-      service_id: 0,
+      service_id: "",
       name_en: "",
       name_mr: "",
       name_hi: "",
@@ -128,7 +128,7 @@ export default function AdminDecorationsPage() {
         return
       }
 
-      const url = editingDecoration ? `/api/decorations/${editingDecoration.id}` : "/api/decorations"
+      const url = editingDecoration ? `/api/decorations/${editingDecoration._id}` : "/api/decorations"
       const method = editingDecoration ? "PUT" : "POST"
       
       const response = await fetch(url, {
@@ -151,7 +151,7 @@ export default function AdminDecorationsPage() {
     }
   }
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this decoration?")) return
 
     try {
@@ -184,8 +184,8 @@ export default function AdminDecorationsPage() {
     )
   }
 
-  const getServiceName = (serviceId: number) => {
-    const service = services.find((s) => s.id === serviceId)
+  const getServiceName = (serviceId: string) => {
+    const service = services.find((s) => s._id === serviceId)
     if (!service) return "Unknown Service"
     return lang === "en" ? service.title_en : lang === "mr" ? service.title_mr : service.title_hi
   }
@@ -237,12 +237,12 @@ export default function AdminDecorationsPage() {
                   </label>
                   <select
                     value={formData.service_id}
-                    onChange={(e) => setFormData({ ...formData, service_id: parseInt(e.target.value) })}
+                    onChange={(e) => setFormData({ ...formData, service_id: e.target.value })}
                     className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
                   >
-                    <option value={0}>{lang === "en" ? "Select Service" : lang === "mr" ? "सेवा निवडा" : "सेवा चुनें"}</option>
+                    <option value="">{lang === "en" ? "Select Service" : lang === "mr" ? "सेवा निवडा" : "सेवा चुनें"}</option>
                     {services.filter((s) => s.category === "events").map((service) => (
-                      <option key={service.id} value={service.id}>
+                      <option key={service._id} value={service._id}>
                         {lang === "en" ? service.title_en : lang === "mr" ? service.title_mr : service.title_hi}
                       </option>
                     ))}
@@ -354,7 +354,7 @@ export default function AdminDecorationsPage() {
 
           <div className="space-y-4">
             {decorations.map((decoration) => (
-              <div key={decoration.id} className="rounded-3xl border border-border/60 bg-card/50 p-6">
+              <div key={decoration._id} className="rounded-3xl border border-border/60 bg-card/50 p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="mb-2">
@@ -380,7 +380,7 @@ export default function AdminDecorationsPage() {
                       <Edit className="size-4" />
                       {lang === "en" ? "Edit" : lang === "mr" ? "संपादित करा" : "संपादित करें"}
                     </Button>
-                    <Button onClick={() => handleDelete(decoration.id!)} variant="destructive" size="sm" className="gap-2">
+                    <Button onClick={() => handleDelete(decoration._id!)} variant="destructive" size="sm" className="gap-2">
                       <Trash2 className="size-4" />
                       {lang === "en" ? "Delete" : lang === "mr" ? "हटवा" : "हटाएं"}
                     </Button>

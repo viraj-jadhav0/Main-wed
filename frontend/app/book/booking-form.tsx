@@ -34,6 +34,7 @@ export function BookingForm() {
     alternate_phone: "",
     preferred_date: "",
     preferred_time: "",
+    preferred_muhurta: "",
     address: "",
     city: "",
     notes: "",
@@ -92,7 +93,7 @@ export function BookingForm() {
     return total
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
@@ -238,44 +239,67 @@ export function BookingForm() {
                 </div>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              {muhurta ? (
                 <div className="space-y-2">
-                  <label htmlFor="preferred_date" className="flex items-center gap-2 text-sm font-medium text-foreground">
-                    <Calendar className="size-4 text-primary" />
-                    {lang === "en" && "Preferred Date"}
-                    {lang === "mr" && "पसंतीची तारीख"}
-                    {lang === "hi" && "पसंदीदा तिथि"}
-                  </label>
-                  <input
-                    type="date"
-                    id="preferred_date"
-                    name="preferred_date"
-                    required
-                    value={formData.preferred_date}
-                    onChange={handleChange}
-                    min={new Date().toISOString().split('T')[0]}
-                    className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="preferred_time" className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                     <Clock className="size-4 text-primary" />
-                    {lang === "en" && "Preferred Time"}
-                    {lang === "mr" && "पसंतीचा वेळ"}
-                    {lang === "hi" && "पसंदीदा समय"}
+                    {lang === "en" && "Select Muhurta"}
+                    {lang === "mr" && "मुहूर्त निवडा"}
+                    {lang === "hi" && "मुहूर्त चुनें"}
                   </label>
-                  <input
-                    type="time"
-                    id="preferred_time"
-                    name="preferred_time"
+                  <select
+                    name="preferred_muhurta"
                     required
-                    value={formData.preferred_time}
+                    value={formData.preferred_muhurta || ""}
                     onChange={handleChange}
                     className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  />
+                  >
+                    <option value="">{lang === "en" ? "Select a muhurta" : lang === "mr" ? "मुहूर्त निवडा" : "मुहूर्त चुनें"}</option>
+                    {muhurta.split(',').map((m, index) => (
+                      <option key={index} value={m.trim()}>{m.trim()}</option>
+                    ))}
+                  </select>
                 </div>
-              </div>
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <label htmlFor="preferred_date" className="flex items-center gap-2 text-sm font-medium text-foreground">
+                      <Calendar className="size-4 text-primary" />
+                      {lang === "en" && "Preferred Date"}
+                      {lang === "mr" && "पसंतीची तारीख"}
+                      {lang === "hi" && "पसंदीदा तिथि"}
+                    </label>
+                    <input
+                      type="date"
+                      id="preferred_date"
+                      name="preferred_date"
+                      required
+                      value={formData.preferred_date}
+                      onChange={handleChange}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="preferred_time" className="flex items-center gap-2 text-sm font-medium text-foreground">
+                      <Clock className="size-4 text-primary" />
+                      {lang === "en" && "Preferred Time"}
+                      {lang === "mr" && "पसंतीचा वेळ"}
+                      {lang === "hi" && "पसंदीदा समय"}
+                    </label>
+                    <input
+                      type="time"
+                      id="preferred_time"
+                      name="preferred_time"
+                      required
+                      value={formData.preferred_time}
+                      onChange={handleChange}
+                      className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <label htmlFor="address" className="flex items-center gap-2 text-sm font-medium text-foreground">

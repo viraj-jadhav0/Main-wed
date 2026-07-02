@@ -35,9 +35,7 @@ interface Service {
   premium_includes_en: string
   premium_includes_mr: string
   premium_includes_hi: string
-  sahitya_en: string
-  sahitya_mr: string
-  sahitya_hi: string
+  sahitya: Array<{ en: string; mr: string; hi: string }>
   muhurta?: string
 }
 
@@ -74,9 +72,7 @@ export default function AdminServicesPage() {
     premium_includes_en: "",
     premium_includes_mr: "",
     premium_includes_hi: "",
-    sahitya_en: "",
-    sahitya_mr: "",
-    sahitya_hi: "",
+    sahitya: [{ en: "", mr: "", hi: "" }],
     muhurta: "",
   })
 
@@ -136,9 +132,7 @@ export default function AdminServicesPage() {
       premium_includes_en: "",
       premium_includes_mr: "",
       premium_includes_hi: "",
-      sahitya_en: "",
-      sahitya_mr: "",
-      sahitya_hi: "",
+      sahitya: [{ en: "", mr: "", hi: "" }],
       muhurta: "",
     })
     setIsAdding(true)
@@ -212,6 +206,25 @@ export default function AdminServicesPage() {
   const handleCancel = () => {
     setEditingService(null)
     setIsAdding(false)
+  }
+
+  const handleAddSahitya = () => {
+    setFormData({
+      ...formData,
+      sahitya: [...(formData.sahitya || []), { en: "", mr: "", hi: "" }]
+    })
+  }
+
+  const handleRemoveSahitya = (index: number) => {
+    const newSahitya = formData.sahitya?.filter((_, i) => i !== index) || []
+    setFormData({ ...formData, sahitya: newSahitya })
+  }
+
+  const handleSahityaChange = (index: number, field: 'en' | 'mr' | 'hi', value: string) => {
+    const newSahitya = formData.sahitya?.map((item, i) =>
+      i === index ? { ...item, [field]: value } : item
+    ) || []
+    setFormData({ ...formData, sahitya: newSahitya })
   }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -627,44 +640,79 @@ export default function AdminServicesPage() {
                 </div>
 
                 <div className="md:col-span-2 border-t border-border/60 pt-4">
-                  <h3 className="mb-4 font-heading text-lg font-semibold text-foreground">
-                    {lang === "en" ? "Sahitya (Materials Provided)" : lang === "mr" ? "साहित्य (पुरवट सामग्री)" : "साहित्य (प्रदान सामग्री)"}
-                  </h3>
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="font-heading text-lg font-semibold text-foreground">
+                      {lang === "en" ? "Sahitya (Materials Provided)" : lang === "mr" ? "साहित्य (पुरवट सामग्री)" : "साहित्य (प्रदान सामग्री)"}
+                    </h3>
+                    <Button
+                      onClick={handleAddSahitya}
+                      variant="outline"
+                      size="sm"
+                      className="gap-2"
+                    >
+                      <Plus className="size-4" />
+                      {lang === "en" ? "Add Sahitya" : lang === "mr" ? "साहित्य जोडा" : "साहित्य जोड़ें"}
+                    </Button>
+                  </div>
                 </div>
-                <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-medium text-foreground">
-                    {lang === "en" ? "Sahitya (English)" : lang === "mr" ? "साहित्य (इंग्रजी)" : "साहित्य (अंग्रेजी)"}
-                  </label>
-                  <textarea
-                    value={formData.sahitya_en || ""}
-                    onChange={(e) => setFormData({ ...formData, sahitya_en: e.target.value })}
-                    className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
-                    rows={2}
-                    placeholder="Item 1, Item 2, Item 3"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-medium text-foreground">
-                    {lang === "en" ? "Sahitya (Marathi)" : lang === "mr" ? "साहित्य (मराठी)" : "साहित्य (मराठी)"}
-                  </label>
-                  <textarea
-                    value={formData.sahitya_mr || ""}
-                    onChange={(e) => setFormData({ ...formData, sahitya_mr: e.target.value })}
-                    className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
-                    rows={2}
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-medium text-foreground">
-                    {lang === "en" ? "Sahitya (Hindi)" : lang === "mr" ? "साहित्य (हिंदी)" : "साहित्य (हिंदी)"}
-                  </label>
-                  <textarea
-                    value={formData.sahitya_hi || ""}
-                    onChange={(e) => setFormData({ ...formData, sahitya_hi: e.target.value })}
-                    className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
-                    rows={2}
-                  />
-                </div>
+                {formData.sahitya?.map((item, index) => (
+                  <div key={index} className="md:col-span-2 rounded-xl border border-border/60 bg-secondary/30 p-4">
+                    <div className="mb-3 flex items-center justify-between">
+                      <span className="text-sm font-medium text-foreground">
+                        {lang === "en" ? `Sahitya ${index + 1}` : lang === "mr" ? `साहित्य ${index + 1}` : `साहित्य ${index + 1}`}
+                      </span>
+                      {formData.sahitya!.length > 1 && (
+                        <Button
+                          onClick={() => handleRemoveSahitya(index)}
+                          variant="destructive"
+                          size="sm"
+                          className="gap-2"
+                        >
+                          <X className="size-4" />
+                          {lang === "en" ? "Remove" : lang === "mr" ? "काढा" : "हटाएं"}
+                        </Button>
+                      )}
+                    </div>
+                    <div className="grid gap-3 md:grid-cols-3">
+                      <div>
+                        <label className="mb-2 block text-sm font-medium text-foreground">
+                          {lang === "en" ? "English" : lang === "mr" ? "इंग्रजी" : "अंग्रेजी"}
+                        </label>
+                        <input
+                          type="text"
+                          value={item.en}
+                          onChange={(e) => handleSahityaChange(index, 'en', e.target.value)}
+                          className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
+                          placeholder="Item name"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-2 block text-sm font-medium text-foreground">
+                          {lang === "en" ? "Marathi" : lang === "mr" ? "मराठी" : "मराठी"}
+                        </label>
+                        <input
+                          type="text"
+                          value={item.mr}
+                          onChange={(e) => handleSahityaChange(index, 'mr', e.target.value)}
+                          className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
+                          placeholder="आयटम नाव"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-2 block text-sm font-medium text-foreground">
+                          {lang === "en" ? "Hindi" : lang === "mr" ? "हिंदी" : "हिंदी"}
+                        </label>
+                        <input
+                          type="text"
+                          value={item.hi}
+                          onChange={(e) => handleSahityaChange(index, 'hi', e.target.value)}
+                          className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
+                          placeholder="आइटम नाम"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
 
                 <div className="md:col-span-2 border-t border-border/60 pt-4">
                   <h3 className="mb-4 font-heading text-lg font-semibold text-foreground">
