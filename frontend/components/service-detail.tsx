@@ -257,7 +257,7 @@ export function ServiceDetail({ service }: { service: Service }) {
                   </div>
 
                   {/* Standard Package */}
-                  <div className="rounded-2xl border-2 border-primary bg-card p-5 transition-all hover:shadow-lg hover:shadow-primary/10">
+                  <div className="rounded-2xl border-2 border-border bg-card p-5 transition-all hover:border-primary hover:shadow-lg hover:shadow-primary/10">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-heading text-lg font-bold text-foreground">{lang === "en" ? "Standard" : lang === "mr" ? "मानक" : "स्टैंडर्ड"}</h3>
