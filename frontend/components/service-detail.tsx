@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
 
 interface Service {
-  id?: number
+  _id?: string
   slug: string
   category: string
   title_en: string
@@ -24,7 +24,7 @@ interface Service {
   short_en: string
   short_mr: string
   short_hi: string
-  image: string
+  images: string[]
   duration: string
   basic_price: string
   basic_includes_en: string
@@ -38,9 +38,7 @@ interface Service {
   premium_includes_en: string
   premium_includes_mr: string
   premium_includes_hi: string
-  sahitya_en: string
-  sahitya_mr: string
-  sahitya_hi: string
+  sahitya: Array<{ en: string; mr: string; hi: string }>
   muhurta?: string
 }
 
@@ -66,16 +64,16 @@ export function ServiceDetail({ service }: { service: Service }) {
   const [selectedMuhurta, setSelectedMuhurta] = useState<string>("")
 
   useEffect(() => {
-    if (service.category === "events" && service.id) {
+    if (service.category === "events" && service._id) {
       fetchDecorations()
     }
-  }, [service.category, service.id])
+  }, [service.category, service._id])
 
   const fetchDecorations = async () => {
-    if (!service.id) return
+    if (!service._id) return
     setLoadingDecorations(true)
     try {
-      const response = await fetch(`/api/decorations/service/${service.id}`)
+      const response = await fetch(`/api/decorations/service/${service._id}`)
       const data = await response.json()
       setDecorations(data.decorations || [])
     } catch (error) {
@@ -134,7 +132,9 @@ export function ServiceDetail({ service }: { service: Service }) {
   const getBasicIncludes = () => getIncludes(lang === "en" ? service.basic_includes_en : lang === "mr" ? service.basic_includes_mr : service.basic_includes_hi)
   const getStandardIncludes = () => getIncludes(lang === "en" ? service.standard_includes_en : lang === "mr" ? service.standard_includes_mr : service.standard_includes_hi)
   const getPremiumIncludes = () => getIncludes(lang === "en" ? service.premium_includes_en : lang === "mr" ? service.premium_includes_mr : service.premium_includes_hi)
-  const getSahitya = () => getIncludes(lang === "en" ? service.sahitya_en : lang === "mr" ? service.sahitya_mr : service.sahitya_hi)
+  const getSahitya = () => {
+    return service.sahitya?.map(item => lang === "en" ? item.en : lang === "mr" ? item.mr : item.hi).filter(item => item) || []
+  }
   const getDecorationName = (deco: Decoration) => lang === "en" ? deco.name_en : lang === "mr" ? deco.name_mr : deco.name_hi
   const getDecorationDescription = (deco: Decoration) => lang === "en" ? deco.description_en : lang === "mr" ? deco.description_mr : deco.description_hi
   const getDecorationPhotos = (deco: Decoration) => deco.photos.split(',').map(p => p.trim()).filter(p => p)
@@ -155,9 +155,9 @@ export function ServiceDetail({ service }: { service: Service }) {
           <div className="mt-6 grid gap-10 lg:grid-cols-2">
             {/* Image / gallery */}
             <div>
-              <div className="relative aspect-square overflow-hidden rounded-3xl border border-border shadow-xl shadow-primary/10">
+              <div className="relative aspect-square overflow-hidden rounded-3xl border border-border shadow-xl shadow-primary/10 cursor-pointer" onClick={(e) => handleImageClick(e, service.images[0] || "/placeholder.svg")}>
                 <Image
-                  src={service.image || "/placeholder.svg"}
+                  src={service.images[0] || "/placeholder.svg"}
                   alt={getTitle()}
                   fill
                   priority
@@ -165,23 +165,26 @@ export function ServiceDetail({ service }: { service: Service }) {
                   className="object-cover"
                 />
               </div>
-              <div className="mt-4 grid grid-cols-3 gap-4">
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="relative aspect-square overflow-hidden rounded-2xl border border-border opacity-90"
-                  >
-                    <Image
-                      src={service.image || "/placeholder.svg"}
-                      alt=""
-                      aria-hidden
-                      fill
-                      sizes="20vw"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
+              {service.images.length > 1 && (
+                <div className="mt-4 grid grid-cols-3 gap-4">
+                  {service.images.slice(1, 4).map((img, i) => (
+                    <div
+                      key={i}
+                      className="relative aspect-square overflow-hidden rounded-2xl border border-border opacity-90 cursor-pointer"
+                      onClick={(e) => handleImageClick(e, img)}
+                    >
+                      <Image
+                        src={img || "/placeholder.svg"}
+                        alt=""
+                        aria-hidden
+                        fill
+                        sizes="20vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Details */}

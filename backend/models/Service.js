@@ -40,9 +40,9 @@ const serviceSchema = new mongoose.Schema({
   short_hi: {
     type: String
   },
-  image: {
+  images: [{
     type: String
-  },
+  }],
   duration: {
     type: String
   },

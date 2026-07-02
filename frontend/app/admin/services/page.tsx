@@ -21,7 +21,7 @@ interface Service {
   short_en: string
   short_mr: string
   short_hi: string
-  image: string
+  images: string[]
   duration: string
   basic_price: string
   basic_includes_en: string
@@ -58,7 +58,7 @@ export default function AdminServicesPage() {
     short_en: "",
     short_mr: "",
     short_hi: "",
-    image: "",
+    images: [""],
     duration: "",
     basic_price: "",
     basic_includes_en: "",
@@ -118,7 +118,7 @@ export default function AdminServicesPage() {
       short_en: "",
       short_mr: "",
       short_hi: "",
-      image: "",
+      images: [""],
       duration: "",
       basic_price: "",
       basic_includes_en: "",
@@ -227,22 +227,40 @@ export default function AdminServicesPage() {
     setFormData({ ...formData, sahitya: newSahitya })
   }
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddImage = () => {
+    setFormData({
+      ...formData,
+      images: [...(formData.images || []), ""]
+    })
+  }
+
+  const handleRemoveImage = (index: number) => {
+    const newImages = formData.images?.filter((_, i) => i !== index) || []
+    setFormData({ ...formData, images: newImages })
+  }
+
+  const handleImageChange = (index: number, value: string) => {
+    const newImages = formData.images?.map((img, i) => i === index ? value : img) || []
+    setFormData({ ...formData, images: newImages })
+  }
+
+  const handleImageUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    const formData = new FormData()
-    formData.append('image', file)
+    const uploadFormData = new FormData()
+    uploadFormData.append('image', file)
 
     try {
       const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
       const response = await fetch(`${API_URL}/api/services/upload`, {
         method: 'POST',
-        body: formData,
+        body: uploadFormData,
       })
       const data = await response.json()
       if (data.imageUrl) {
-        setFormData({ ...formData, image: data.imageUrl })
+        const newImages = formData.images?.map((img: string, i: number) => i === index ? data.imageUrl : img) || []
+        setFormData({ ...formData, images: newImages })
       }
     } catch (error) {
       console.error('Error uploading image:', error)
@@ -380,29 +398,60 @@ export default function AdminServicesPage() {
                     placeholder="2-3 hours"
                   />
                 </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
-                    {lang === "en" ? "Image URL" : lang === "mr" ? "प्रतिमा URL" : "छवि URL"}
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={formData.image || ""}
-                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                      className="flex-1 rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
-                      placeholder="/images/service.jpg"
-                    />
-                    <label className="flex items-center gap-2 rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground hover:border-primary cursor-pointer transition-colors">
-                      <Upload className="size-4" />
-                      <span className="text-sm">{lang === "en" ? "Upload" : lang === "mr" ? "अपलोड" : "अपलोड"}</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                      />
+                <div className="md:col-span-2">
+                  <div className="mb-4 flex items-center justify-between">
+                    <label className="mb-2 block text-sm font-medium text-foreground">
+                      {lang === "en" ? "Images" : lang === "mr" ? "प्रतिमा" : "छवियां"}
                     </label>
+                    <Button
+                      onClick={handleAddImage}
+                      variant="outline"
+                      size="sm"
+                      className="gap-2"
+                    >
+                      <Plus className="size-4" />
+                      {lang === "en" ? "Add Image" : lang === "mr" ? "प्रतिमा जोडा" : "छवि जोड़ें"}
+                    </Button>
                   </div>
+                  {formData.images?.map((img, index) => (
+                    <div key={index} className="mb-3 rounded-xl border border-border/60 bg-secondary/30 p-4">
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="text-sm font-medium text-foreground">
+                          {lang === "en" ? `Image ${index + 1}` : lang === "mr" ? `प्रतिमा ${index + 1}` : `छवि ${index + 1}`}
+                        </span>
+                        {formData.images!.length > 1 && (
+                          <Button
+                            onClick={() => handleRemoveImage(index)}
+                            variant="destructive"
+                            size="sm"
+                            className="gap-2"
+                          >
+                            <X className="size-4" />
+                            {lang === "en" ? "Remove" : lang === "mr" ? "काढा" : "हटाएं"}
+                          </Button>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={img}
+                          onChange={(e) => handleImageChange(index, e.target.value)}
+                          className="flex-1 rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground focus:border-primary focus:outline-none"
+                          placeholder="/images/service.jpg"
+                        />
+                        <label className="flex items-center gap-2 rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground hover:border-primary cursor-pointer transition-colors">
+                          <Upload className="size-4" />
+                          <span className="text-sm">{lang === "en" ? "Upload" : lang === "mr" ? "अपलोड" : "अपलोड"}</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleImageUpload(index, e)}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  ))}
                 </div>
                 <div>
                   <label className="mb-2 block text-sm font-medium text-foreground">
