@@ -234,7 +234,7 @@ export function ServiceDetail({ service }: { service: Service }) {
                   <h2 className="font-heading text-lg font-bold text-foreground">{lang === "en" ? "Choose Package" : lang === "mr" ? "पॅकेज निवडा" : "पैकेज चुनें"}</h2>
                   
                   {/* Basic Package */}
-                  <div className="rounded-2xl border border-border bg-card p-5">
+                  <div className="rounded-2xl border-2 border-border bg-card p-5 transition-all hover:border-primary hover:shadow-lg hover:shadow-primary/10">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-heading text-lg font-bold text-foreground">{lang === "en" ? "Basic" : lang === "mr" ? "मूलभूत" : "बेसिक"}</h3>
@@ -257,7 +257,7 @@ export function ServiceDetail({ service }: { service: Service }) {
                   </div>
 
                   {/* Standard Package */}
-                  <div className="rounded-2xl border-2 border-primary bg-card p-5">
+                  <div className="rounded-2xl border-2 border-primary bg-card p-5 transition-all hover:shadow-lg hover:shadow-primary/10">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-heading text-lg font-bold text-foreground">{lang === "en" ? "Standard" : lang === "mr" ? "मानक" : "स्टैंडर्ड"}</h3>
@@ -280,7 +280,7 @@ export function ServiceDetail({ service }: { service: Service }) {
                   </div>
 
                   {/* Premium Package */}
-                  <div className="rounded-2xl border border-border bg-card p-5">
+                  <div className="rounded-2xl border-2 border-border bg-card p-5 transition-all hover:border-primary hover:shadow-lg hover:shadow-primary/10">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-heading text-lg font-bold text-foreground">{lang === "en" ? "Premium" : lang === "mr" ? "प्रीमियम" : "प्रीमियम"}</h3>
