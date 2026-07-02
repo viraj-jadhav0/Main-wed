@@ -54,8 +54,7 @@ export default function AdminHeroPage() {
     formData.append('image', file)
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-      const response = await fetch(`${API_URL}/api/hero/upload`, {
+      const response = await fetch("/api/hero/upload", {
         method: 'POST',
         body: formData,
       })

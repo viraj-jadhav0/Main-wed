@@ -46,8 +46,8 @@ export function Navbar() {
           scrolled ? "glass shadow-lg shadow-primary/5" : "bg-background/40 backdrop-blur-md",
         )}
       >
-        <Link href="/" className="flex items-center gap-2 pl-1" aria-label="GurujiforPooja home">
-          <div className="relative size-12 overflow-hidden rounded-full bg-primary/10">
+        <Link href="/" className="flex items-center gap-2.5 pl-2" aria-label="GurujiforPooja home">
+          <div className="relative size-10 overflow-hidden rounded-full bg-primary/10 flex-shrink-0">
             <Image
               src="/images/logo.png"
               alt="GurujiforPooja Logo"
@@ -56,7 +56,7 @@ export function Navbar() {
               priority
             />
           </div>
-          <span className="font-heading text-lg font-bold tracking-tight text-foreground">
+          <span className="font-heading text-base font-bold tracking-tight text-foreground hidden sm:block">
             Guruji<span className="text-primary">for</span>Pooja
           </span>
         </Link>
