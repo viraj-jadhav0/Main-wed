@@ -22,6 +22,14 @@ export const metadata: Metadata = {
     'Book experienced, learned pandits for every pooja and ceremony. Authentic Vedic rituals performed with devotion at your doorstep. Weddings, Griha Pravesh, Satyanarayan Pooja, Rudra Abhishek and more.',
   generator: 'v0.app',
   keywords: ['pooja', 'pandit', 'pooja booking', 'havan', 'satyanarayan', 'griha pravesh', 'vedic rituals'],
+  icons: {
+    icon: [
+      { url: '/icon.svg' },
+      { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
+      { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
+    ],
+    apple: '/apple-icon.png',
+  },
 }
 
 export const viewport: Viewport = {
