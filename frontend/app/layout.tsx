@@ -23,11 +23,7 @@ export const metadata: Metadata = {
   generator: 'v0.app',
   keywords: ['pooja', 'pandit', 'pooja booking', 'havan', 'satyanarayan', 'griha pravesh', 'vedic rituals'],
   icons: {
-    icon: [
-      { url: '/icon.svg' },
-      { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
-      { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
-    ],
+    icon: '/favicon.png',
     apple: '/apple-icon.png',
   },
 }
