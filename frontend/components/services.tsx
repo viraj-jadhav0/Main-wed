@@ -21,7 +21,8 @@ interface Service {
   short_en: string
   short_mr: string
   short_hi: string
-  images: string[]
+  images?: string[]
+  image?: string
   duration: string
   basic_price: string
   standard_price: string
@@ -111,7 +112,7 @@ export function Services() {
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src={s.images?.[0] || "/placeholder.svg"}
+                  src={s.images?.[0] || s.image || "/placeholder.svg"}
                   alt={getTitle(s)}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
