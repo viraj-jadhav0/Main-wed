@@ -15,7 +15,7 @@ const slides = [
 ]
 
 export function Hero() {
-  const { lang } = useApp()
+  const { lang, theme } = useApp()
   const [active, setActive] = useState(0)
 
   useEffect(() => {
@@ -47,7 +47,10 @@ export function Hero() {
 
       {/* rotating chakra glow */}
       <div className="pointer-events-none absolute right-6 top-24 size-28 sm:right-12 sm:size-40 lg:size-48">
-        <div className="absolute inset-0 rounded-full bg-primary/30 blur-3xl" />
+        <div className={cn(
+          "absolute inset-0 rounded-full bg-primary/30",
+          theme === "dark" ? "blur-3xl" : ""
+        )} />
         <Image
           src="/images/chakra.png"
           alt=""
@@ -61,7 +64,10 @@ export function Hero() {
       {/* content */}
       <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-center px-4 sm:px-6">
         <div className="animate-fade-in max-w-2xl text-center sm:text-left">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-sm">
+          <span className={cn(
+            "inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-4 py-1.5 text-sm font-medium text-primary",
+            theme === "dark" ? "backdrop-blur-sm" : ""
+          )}>
             <Sparkles className="size-4" />
             {t.hero.tagline[lang]}
           </span>
@@ -81,7 +87,10 @@ export function Hero() {
             </a>
             <a
               href="#services"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:w-auto"
+              className={cn(
+                "inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/20 sm:w-auto",
+                theme === "dark" ? "backdrop-blur-sm" : ""
+              )}
             >
               {t.hero.secondaryCta[lang]}
             </a>

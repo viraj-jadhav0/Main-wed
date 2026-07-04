@@ -43,7 +43,7 @@ export function Navbar() {
       <nav
         className={cn(
           "mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-full border border-border/60 px-3 py-2 transition-all duration-300 sm:px-4",
-          scrolled ? "glass shadow-lg shadow-primary/5" : "bg-background/40 backdrop-blur-md",
+          scrolled ? "glass shadow-lg shadow-primary/5" : cn("bg-background/40", theme === "dark" ? "backdrop-blur-md" : ""),
         )}
       >
         <Link href="/" className="flex items-center gap-2.5 pl-2" aria-label="GurujiforPooja home">
