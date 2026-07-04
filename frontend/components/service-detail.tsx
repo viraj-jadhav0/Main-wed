@@ -339,34 +339,36 @@ export function ServiceDetail({ service }: { service: Service }) {
                         }`}
                         onClick={() => toggleDecoration(deco.id)}
                       >
-                        <div className="flex items-start justify-between mb-2">
+                        <div className="flex flex-col gap-3">
                           {getDecorationPhotos(deco).length > 0 && (
                             <div 
-                              className="aspect-video overflow-hidden rounded-xl flex-1 mr-3 cursor-pointer"
+                              className="aspect-square overflow-hidden rounded-xl cursor-pointer"
                               onClick={(e) => handleImageClick(e, getDecorationPhotos(deco)[0])}
                             >
                               <Image
                                 src={getDecorationPhotos(deco)[0]}
                                 alt={getDecorationName(deco)}
                                 width={400}
-                                height={225}
+                                height={400}
                                 className="h-full w-full object-cover hover:scale-105 transition-transform"
                               />
                             </div>
                           )}
-                          <div className={`flex size-6 items-center justify-center rounded-full border-2 ${
-                            selectedDecorations.includes(deco.id)
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-border"
-                          }`}>
-                            {selectedDecorations.includes(deco.id) && (
-                              <Check className="size-3.5" />
-                            )}
+                          <div className="flex items-center justify-between">
+                            <h3 className="font-heading text-base font-semibold text-foreground">{getDecorationName(deco)}</h3>
+                            <div className={`flex size-6 items-center justify-center rounded-full border-2 ${
+                              selectedDecorations.includes(deco.id)
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border"
+                            }`}>
+                              {selectedDecorations.includes(deco.id) && (
+                                <Check className="size-3.5" />
+                              )}
+                            </div>
                           </div>
+                          <p className="text-sm text-muted-foreground line-clamp-2">{getDecorationDescription(deco)}</p>
+                          <p className="font-heading text-lg font-bold text-primary">{deco.price}</p>
                         </div>
-                        <h3 className="font-heading text-base font-semibold text-foreground">{getDecorationName(deco)}</h3>
-                        <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{getDecorationDescription(deco)}</p>
-                        <p className="mt-2 font-heading text-lg font-bold text-primary">{deco.price}</p>
                       </div>
                     ))}
                   </div>

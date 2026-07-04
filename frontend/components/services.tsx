@@ -9,7 +9,7 @@ import { t } from "@/lib/translations"
 import { cn } from "@/lib/utils"
 
 interface Service {
-  id?: number
+  _id?: string
   slug: string
   category: string
   title_en: string
@@ -21,7 +21,7 @@ interface Service {
   short_en: string
   short_mr: string
   short_hi: string
-  image: string
+  images: string[]
   duration: string
   basic_price: string
   standard_price: string
@@ -111,7 +111,7 @@ export function Services() {
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src={s.image || "/placeholder.svg"}
+                  src={s.images?.[0] || "/placeholder.svg"}
                   alt={getTitle(s)}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
