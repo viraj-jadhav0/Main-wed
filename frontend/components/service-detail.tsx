@@ -337,46 +337,48 @@ export function ServiceDetail({ service }: { service: Service }) {
                     <Sparkles className="size-5 text-primary" />
                     {lang === "en" ? "Decoration Options" : lang === "mr" ? "सजावट पर्याय" : "सजावट विकल्प"}
                   </h2>
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="mt-4 flex flex-wrap gap-4">
                     {decorations.map((deco) => (
                       <div 
                         key={deco.id} 
-                        className={`rounded-2xl border bg-card p-4 cursor-pointer transition-all ${
+                        style={{ width: '195px', minHeight: '290px' }}
+                        className={`rounded-2xl border bg-card p-4 cursor-pointer transition-all flex-shrink-0 ${
                           selectedDecorations.includes(deco.id) 
                             ? "border-primary ring-2 ring-primary/20" 
                             : "border-border hover:border-primary/50"
                         }`}
                         onClick={() => toggleDecoration(deco.id)}
                       >
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-3 h-full">
                           {getDecorationPhotos(deco).length > 0 && (
                             <div 
-                              className="aspect-square overflow-hidden rounded-xl cursor-pointer"
+                              style={{ height: '180px' }}
+                              className="overflow-hidden rounded-xl cursor-pointer"
                               onClick={(e) => handleImageClick(e, getDecorationPhotos(deco)[0])}
                             >
                               <Image
                                 src={getDecorationPhotos(deco)[0]}
                                 alt={getDecorationName(deco)}
-                                width={400}
-                                height={400}
+                                width={195}
+                                height={180}
                                 className="h-full w-full object-cover hover:scale-105 transition-transform"
                               />
                             </div>
                           )}
                           <div className="flex items-center justify-between">
-                            <h3 className="font-heading text-base font-semibold text-foreground">{getDecorationName(deco)}</h3>
-                            <div className={`flex size-6 items-center justify-center rounded-full border-2 ${
+                            <h3 className="font-heading text-sm font-semibold text-foreground line-clamp-1">{getDecorationName(deco)}</h3>
+                            <div className={`flex size-5 items-center justify-center rounded-full border-2 flex-shrink-0 ${
                               selectedDecorations.includes(deco.id)
                                 ? "border-primary bg-primary text-primary-foreground"
                                 : "border-border"
                             }`}>
                               {selectedDecorations.includes(deco.id) && (
-                                <Check className="size-3.5" />
+                                <Check className="size-3" />
                               )}
                             </div>
                           </div>
-                          <p className="text-sm text-muted-foreground line-clamp-2">{getDecorationDescription(deco)}</p>
-                          <p className="font-heading text-lg font-bold text-primary">{deco.price}</p>
+                          <p className="text-xs text-muted-foreground line-clamp-2 flex-1">{getDecorationDescription(deco)}</p>
+                          <p className="font-heading text-base font-bold text-primary">{deco.price}</p>
                         </div>
                       </div>
                     ))}
