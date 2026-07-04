@@ -31,6 +31,45 @@ interface Service {
   premium_price: string
 }
 
+function ServiceCard({ service, index, getCategoryRoute, getTitle, getShort, lang }: {
+  service: Service
+  index: number
+  getCategoryRoute: (category: string) => string
+  getTitle: (service: Service) => string
+  getShort: (service: Service) => string
+  lang: string
+}) {
+  const { ref: cardRef, isVisible: cardVisible } = useScrollAnimation<HTMLDivElement>()
+
+  return (
+    <div ref={cardRef} className={`transition-all duration-500 ${cardVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${index * 100}ms` }}>
+      <Link
+        href={`/${getCategoryRoute(service.category)}/${service.slug}`}
+        className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-primary/10"
+      >
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <Image
+            src={service.images?.[0] || service.image || "/placeholder.svg"}
+            alt={getTitle(service)}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+        </div>
+        <div className="flex flex-1 flex-col p-5">
+          <h3 className="font-heading text-lg font-bold text-foreground">{getTitle(service)}</h3>
+          <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{getShort(service)}</p>
+          <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+            {t.categories.viewDetails[lang as keyof typeof t.categories.viewDetails]}
+            <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </span>
+        </div>
+      </Link>
+    </div>
+  )
+}
+
 const tabs: { key: string; label: keyof typeof t.categories }[] = [
   { key: "events", label: "events" },
   { key: "pooja", label: "pooja" },
@@ -115,36 +154,17 @@ export function Services() {
               <ServiceCardSkeleton />
             </>
           ) : (
-            filtered.map((s, index) => {
-              const { ref: cardRef, isVisible: cardVisible } = useScrollAnimation<HTMLDivElement>()
-              return (
-                <div key={s.slug} ref={cardRef} className={`transition-all duration-500 ${cardVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${index * 100}ms` }}>
-                  <Link
-                    href={`/${getCategoryRoute(s.category)}/${s.slug}`}
-                    className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-primary/10"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      <Image
-                        src={s.images?.[0] || s.image || "/placeholder.svg"}
-                        alt={getTitle(s)}
-                        fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                    </div>
-                    <div className="flex flex-1 flex-col p-5">
-                      <h3 className="font-heading text-lg font-bold text-foreground">{getTitle(s)}</h3>
-                      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{getShort(s)}</p>
-                      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                        {t.categories.viewDetails[lang]}
-                        <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      </span>
-                    </div>
-                  </Link>
-                </div>
-              )
-            })
+            filtered.map((s, index) => (
+              <ServiceCard
+                key={s.slug}
+                service={s}
+                index={index}
+                getCategoryRoute={getCategoryRoute}
+                getTitle={getTitle}
+                getShort={getShort}
+                lang={lang}
+              />
+            ))
           )}
         </div>
       </div>
