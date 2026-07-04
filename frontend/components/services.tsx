@@ -7,6 +7,8 @@ import { ArrowUpRight } from "lucide-react"
 import { useApp } from "@/components/app-provider"
 import { t } from "@/lib/translations"
 import { cn } from "@/lib/utils"
+import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { ServiceCardSkeleton } from "@/components/skeleton"
 
 interface Service {
   _id?: string
@@ -69,10 +71,12 @@ export function Services() {
   const getTitle = (service: Service) => lang === "en" ? service.title_en : lang === "mr" ? service.title_mr : service.title_hi
   const getShort = (service: Service) => lang === "en" ? service.short_en : lang === "mr" ? service.short_mr : service.short_hi
 
+  const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation()
+
   return (
-    <section id="services" className="scroll-mt-24 py-16 sm:py-24">
+    <section id="services" ref={sectionRef} className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="text-center">
+        <div className={`text-center transition-all duration-700 ease-out ${sectionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h2 className="text-balance font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             {t.categories.heading[lang]}
           </h2>
@@ -104,32 +108,44 @@ export function Services() {
 
         {/* Cards grid */}
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((s) => (
-            <Link
-              key={s.slug}
-              href={`/${getCategoryRoute(s.category)}/${s.slug}`}
-              className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-primary/10"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src={s.images?.[0] || s.image || "/placeholder.svg"}
-                  alt={getTitle(s)}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-              </div>
-              <div className="flex flex-1 flex-col p-5">
-                <h3 className="font-heading text-lg font-bold text-foreground">{getTitle(s)}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{getShort(s)}</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                  {t.categories.viewDetails[lang]}
-                  <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </span>
-              </div>
-            </Link>
-          ))}
+          {loading ? (
+            <>
+              <ServiceCardSkeleton />
+              <ServiceCardSkeleton />
+              <ServiceCardSkeleton />
+            </>
+          ) : (
+            filtered.map((s, index) => {
+              const { ref: cardRef, isVisible: cardVisible } = useScrollAnimation<HTMLDivElement>()
+              return (
+                <div key={s.slug} ref={cardRef} className={`transition-all duration-500 ${cardVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${index * 100}ms` }}>
+                  <Link
+                    href={`/${getCategoryRoute(s.category)}/${s.slug}`}
+                    className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-primary/10"
+                  >
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <Image
+                        src={s.images?.[0] || s.image || "/placeholder.svg"}
+                        alt={getTitle(s)}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    </div>
+                    <div className="flex flex-1 flex-col p-5">
+                      <h3 className="font-heading text-lg font-bold text-foreground">{getTitle(s)}</h3>
+                      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{getShort(s)}</p>
+                      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                        {t.categories.viewDetails[lang]}
+                        <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              )
+            })
+          )}
         </div>
       </div>
     </section>

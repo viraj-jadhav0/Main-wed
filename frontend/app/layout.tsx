@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google'
 import { AppProvider } from '@/components/app-provider'
 import { WhatsAppButton } from '@/components/whatsapp-button'
+import { PageTransition } from '@/components/page-transition'
 import './globals.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
@@ -50,7 +51,9 @@ export default function RootLayout({
       <head>
       </head>
       <body className="font-sans antialiased" suppressHydrationWarning>
-        <AppProvider>{children}</AppProvider>
+        <AppProvider>
+          <PageTransition>{children}</PageTransition>
+        </AppProvider>
         <WhatsAppButton />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
