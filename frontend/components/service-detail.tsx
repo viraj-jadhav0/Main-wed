@@ -341,44 +341,44 @@ export function ServiceDetail({ service }: { service: Service }) {
                     {decorations.map((deco) => (
                       <div 
                         key={deco.id} 
-                        style={{ width: '260px', minHeight: '380px' }}
-                        className={`rounded-2xl border bg-card p-5 cursor-pointer transition-all flex-shrink-0 ${
+                        style={{ width: '320px', minHeight: '450px' }}
+                        className={`rounded-2xl border bg-card p-6 cursor-pointer transition-all flex-shrink-0 ${
                           selectedDecorations.includes(deco.id) 
                             ? "border-primary ring-2 ring-primary/20" 
                             : "border-border hover:border-primary/50"
                         }`}
                         onClick={() => toggleDecoration(deco.id)}
                       >
-                        <div className="flex flex-col gap-4 h-full">
+                        <div className="flex flex-col gap-5 h-full">
                           {getDecorationPhotos(deco).length > 0 && (
                             <div 
-                              style={{ height: '220px' }}
+                              style={{ height: '260px' }}
                               className="overflow-hidden rounded-xl cursor-pointer"
                               onClick={(e) => handleImageClick(e, getDecorationPhotos(deco)[0])}
                             >
                               <Image
                                 src={getDecorationPhotos(deco)[0]}
                                 alt={getDecorationName(deco)}
-                                width={260}
-                                height={220}
+                                width={320}
+                                height={260}
                                 className="h-full w-full object-cover hover:scale-105 transition-transform"
                               />
                             </div>
                           )}
                           <div className="flex items-center justify-between">
-                            <h3 className="font-heading text-lg font-semibold text-foreground line-clamp-1">{getDecorationName(deco)}</h3>
-                            <div className={`flex size-7 items-center justify-center rounded-full border-2 flex-shrink-0 ${
+                            <h3 className="font-heading text-xl font-semibold text-foreground line-clamp-1">{getDecorationName(deco)}</h3>
+                            <div className={`flex size-8 items-center justify-center rounded-full border-2 flex-shrink-0 ${
                               selectedDecorations.includes(deco.id)
                                 ? "border-primary bg-primary text-primary-foreground"
                                 : "border-border"
                             }`}>
                               {selectedDecorations.includes(deco.id) && (
-                                <Check className="size-4" />
+                                <Check className="size-5" />
                               )}
                             </div>
                           </div>
-                          <p className="text-sm text-muted-foreground line-clamp-2 flex-1">{getDecorationDescription(deco)}</p>
-                          <p className="font-heading text-xl font-bold text-primary">{deco.price}</p>
+                          <p className="text-base text-muted-foreground line-clamp-2 flex-1">{getDecorationDescription(deco)}</p>
+                          <p className="font-heading text-2xl font-bold text-primary">{deco.price}</p>
                         </div>
                       </div>
                     ))}
