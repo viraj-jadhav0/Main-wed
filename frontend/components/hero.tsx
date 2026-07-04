@@ -42,8 +42,12 @@ export function Hero() {
       ))}
 
       {/* readability overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/20" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-black/30" />
+      {theme === "dark" && (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-black/30" />
+        </>
+      )}
 
       {/* rotating chakra glow */}
       <div className="pointer-events-none absolute right-6 top-24 size-28 sm:right-12 sm:size-40 lg:size-48">
