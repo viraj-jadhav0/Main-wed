@@ -14,29 +14,41 @@ export default function AdminLoginPage() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
   const [loading, setLoading] = useState(false)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    setSuccess("")
     setLoading(true)
 
     try {
+      console.log("Attempting login with:", { username, password })
       const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       })
 
+      console.log("Response status:", response.status)
       const data = await response.json()
+      console.log("Response data:", data)
 
-      if (response.ok) {
-        localStorage.setItem("admin", JSON.stringify(data.admin))
-        router.push("/admin/dashboard")
+      if (response.ok && (data.success || data.admin)) {
+        const adminData = data.admin || data
+        localStorage.setItem("admin", JSON.stringify(adminData))
+        console.log("Login successful, redirecting to dashboard")
+        setSuccess("Login successful! Redirecting...")
+        setTimeout(() => {
+          router.push("/admin/dashboard")
+        }, 500)
       } else {
+        console.error("Login failed:", data)
         setError(data.error || "Login failed")
       }
     } catch (error) {
+      console.error("Login error:", error)
       setError("Failed to login. Please try again.")
     } finally {
       setLoading(false)
@@ -114,6 +126,12 @@ export default function AdminLoginPage() {
               {error && (
                 <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
                   {error}
+                </div>
+              )}
+
+              {success && (
+                <div className="rounded-xl bg-green-50 p-3 text-sm text-green-600 dark:bg-green-900/20 dark:text-green-400">
+                  {success}
                 </div>
               )}
 
