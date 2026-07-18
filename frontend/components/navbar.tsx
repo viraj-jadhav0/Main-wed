@@ -3,17 +3,22 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
-import { Moon, Sun, Globe, Menu, X, Phone, Check } from "lucide-react"
+import { Moon, Sun, Globe, Menu, X, Phone, Check, Search } from "lucide-react"
 import { useApp } from "@/components/app-provider"
 import { languages, t } from "@/lib/translations"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 export function Navbar() {
   const { lang, setLang, theme, toggleTheme } = useApp()
+  const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
   const langRef = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -25,6 +30,7 @@ export function Navbar() {
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false)
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) setSearchOpen(false)
     }
     document.addEventListener("mousedown", onClick)
     return () => document.removeEventListener("mousedown", onClick)
@@ -37,6 +43,15 @@ export function Navbar() {
     { href: "/about-us", label: t.nav.aboutUs[lang] },
     { href: "/faq", label: t.nav.faq[lang] },
   ]
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`)
+      setSearchOpen(false)
+      setSearchQuery("")
+    }
+  }
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4">
@@ -77,6 +92,37 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-1.5">
+          {/* Search */}
+          <div className="relative" ref={searchRef}>
+            <button
+              onClick={() => setSearchOpen((o) => !o)}
+              className="flex size-9 items-center justify-center rounded-full border border-border/70 bg-background/60 text-foreground transition-colors hover:bg-secondary"
+              aria-label="Search"
+            >
+              <Search className="size-4" />
+            </button>
+            {searchOpen && (
+              <div className="absolute right-0 mt-2 w-72 overflow-hidden rounded-2xl border border-border bg-popover p-3 shadow-xl shadow-primary/10">
+                <form onSubmit={handleSearch} className="flex gap-2">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={lang === "en" ? "Search services..." : lang === "mr" ? "सेवा शोधा..." : "सेवाएं खोजें..."}
+                    className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    autoFocus
+                  />
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                  >
+                    {lang === "en" ? "Search" : lang === "mr" ? "शोधा" : "खोजें"}
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
+
           {/* Language selector */}
           <div className="relative" ref={langRef}>
             <button

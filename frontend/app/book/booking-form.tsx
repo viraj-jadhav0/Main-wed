@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { useApp } from "@/components/app-provider"
-import { Calendar, Clock, MapPin, Phone, Mail, User, Loader2, ArrowLeft } from "lucide-react"
+import { Calendar, Clock, MapPin, Phone, User, Loader2, ArrowLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -29,7 +29,6 @@ export function BookingForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     phone: "",
     alternate_phone: "",
     preferred_date: "",
@@ -182,24 +181,6 @@ export function BookingForm() {
                     onChange={handleChange}
                     className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     placeholder={lang === "en" ? "Enter your full name" : lang === "mr" ? "तुमचे पूर्ण नाव टाका" : "अपना पूरा नाम दर्ज करें"}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="email" className="flex items-center gap-2 text-sm font-medium text-foreground">
-                    <Mail className="size-4 text-primary" />
-                    {lang === "en" && "Email"}
-                    {lang === "mr" ? "ईमेल" : "ईमेल"}
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full rounded-xl border border-border/60 bg-background/50 px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    placeholder={lang === "en" ? "Enter your email" : lang === "mr" ? "तुमचा ईमेल टाका" : "अपना ईमेल दर्ज करें"}
                   />
                 </div>
 

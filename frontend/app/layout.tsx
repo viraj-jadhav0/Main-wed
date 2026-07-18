@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google'
 import { AppProvider } from '@/components/app-provider'
 import { WhatsAppButton } from '@/components/whatsapp-button'
+import { CallSupport } from '@/components/call-support'
 import { PageTransition } from '@/components/page-transition'
 import './globals.css'
 
@@ -55,6 +56,7 @@ export default function RootLayout({
           <PageTransition>{children}</PageTransition>
         </AppProvider>
         <WhatsAppButton />
+        <CallSupport />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
