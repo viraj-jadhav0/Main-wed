@@ -54,9 +54,9 @@ export default function RootLayout({
       <body className="font-sans antialiased" suppressHydrationWarning>
         <AppProvider>
           <PageTransition>{children}</PageTransition>
+          <WhatsAppButton />
+          <CallSupport />
         </AppProvider>
-        <WhatsAppButton />
-        <CallSupport />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
