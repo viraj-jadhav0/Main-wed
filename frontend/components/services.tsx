@@ -88,12 +88,23 @@ export function Services() {
 
   const fetchServices = async () => {
     try {
-      const response = await fetch("/api/services")
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 second timeout
+      
+      const response = await fetch("/api/services", { 
+        signal: controller.signal,
+        cache: 'no-store'
+      })
+      clearTimeout(timeoutId)
+      
+      if (!response.ok) throw new Error('Failed to fetch')
+      
       const data = await response.json()
       setServices(data.services || [])
       setLoading(false)
     } catch (error) {
       console.error("Error fetching services:", error)
+      setServices([]) // Set empty array on error to prevent hanging
       setLoading(false)
     }
   }
